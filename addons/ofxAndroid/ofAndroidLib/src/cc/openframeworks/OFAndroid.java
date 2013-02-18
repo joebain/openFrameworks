@@ -37,6 +37,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -49,6 +50,8 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import tv.ouya.console.api.OuyaController;
 
 public class OFAndroid {
 	
@@ -472,6 +475,11 @@ public class OFAndroid {
     public static native void render();
     public static native void exit();
     
+    public static native void onAxisChanged(int padId, int axisId, float val);
+    public static native void onButtonPressed(int padId, int button);
+    public static native void onButtonReleased(int padId, int button);
+//    public static native void onUnplug(int padId);
+    
     public static native void onTouchDown(int id,float x,float y,float pressure);
     public static native void onTouchDoubleTap(int id,float x,float y,float pressure);
     public static native void onTouchUp(int id,float x,float y,float pressure);
@@ -859,6 +867,10 @@ public class OFAndroid {
         {
         	int unicodeChar = event.getUnicodeChar();
         	onKeyDown(unicodeChar);
+        	
+        	//int player = OuyaController.getControllerByDeviceId(event.getDeviceId()).getPlayerNum();
+        	int player = event.getDeviceId();
+    		onButtonReleased(player, keyCode);
 
         	// return false to let Android handle certain keys
     		// like the back and menu keys
@@ -884,10 +896,48 @@ public class OFAndroid {
     		int unicodeChar = event.getUnicodeChar();
     		onKeyUp(unicodeChar);
     		
+    		//int player = OuyaController.getControllerByDeviceId(event.getDeviceId()).getPlayerNum();
+    		int player = event.getDeviceId();
+    		onButtonReleased(player, keyCode);
+    		
     		// return false to let Android handle certain keys
     		// like the back and menu keys
         	return false;
         }
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 * @return
+	 */
+	public static boolean genericMotionEvent(final MotionEvent event) {
+		
+		if ((event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
+			if (event.getAction() == MotionEvent.ACTION_MOVE) {
+
+				//int player = OuyaController.getControllerByDeviceId(event.getDeviceId()).getPlayerNum();
+				int player = event.getDeviceId();
+
+				float LS_X = event.getAxisValue(OuyaController.AXIS_LS_X);
+        	    float LS_Y = event.getAxisValue(OuyaController.AXIS_LS_Y);
+        	    float RS_X = event.getAxisValue(OuyaController.AXIS_RS_X);
+        	    float RS_Y = event.getAxisValue(OuyaController.AXIS_RS_Y);
+        	    float L2 = event.getAxisValue(OuyaController.AXIS_L2);
+        	    float R2 = event.getAxisValue(OuyaController.AXIS_R2);
+
+    			onAxisChanged(player, OuyaController.AXIS_LS_X, LS_X);
+    			onAxisChanged(player, OuyaController.AXIS_LS_Y, LS_Y);
+    			onAxisChanged(player, OuyaController.AXIS_RS_X, RS_X);
+    			onAxisChanged(player, OuyaController.AXIS_RS_Y, RS_Y);
+    			onAxisChanged(player, OuyaController.AXIS_L2, L2);
+    			onAxisChanged(player, OuyaController.AXIS_R2, R2);
+    			
+	        	return true;
+	         }
+	     }
+
+		return false;
 	}
 }
 

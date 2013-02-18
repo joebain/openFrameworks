@@ -429,6 +429,22 @@ Java_cc_openframeworks_OFAndroid_render( JNIEnv*  env, jclass  thiz )
 }
 
 void
+Java_cc_openframeworks_OFAndroid_onAxisChanged(JNIEnv*  env, jclass  thiz, jint padId, jint axisId, jfloat v){
+    ofLog(OF_LOG_VERBOSE) << "got an axis change: " << padId << ", " << axisId << ", " << v;
+//    ofNotifyEvent(ofEvents().axisChange,touch);
+}
+
+void
+Java_cc_openframeworks_OFAndroid_onButtonPressed(JNIEnv*  env, jclass  thiz, jint padId, jint buttonId){
+    ofLog(OF_LOG_VERBOSE) << "button press: " << padId << ", " << buttonId;
+}
+
+void
+Java_cc_openframeworks_OFAndroid_onButtonReleased(JNIEnv*  env, jclass  thiz, jint padId, jint buttonId){
+    ofLog(OF_LOG_VERBOSE) << "button release: " << padId << ", " << buttonId;
+}
+
+void
 Java_cc_openframeworks_OFAndroid_onTouchDown(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure){
 	ofTouchEventArgs touch;
 	touch.id = id;

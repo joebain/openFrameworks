@@ -34,7 +34,8 @@ endif
 
 ifeq ($(ARCH),android)
 	COMPILER_OPTIMIZATION = -Os
-	NDK_PLATFORM = android-8
+#         NDK_PLATFORM = android-8
+	NDK_PLATFORM = android-14
 	GCC_VERSION = 4.6
 else
 ifeq ($(ARCH),armv7l)

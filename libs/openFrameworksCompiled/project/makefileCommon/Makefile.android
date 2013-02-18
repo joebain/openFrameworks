@@ -1,6 +1,7 @@
 COMPILER_OPTIMIZATION = $(ANDROID_COMPILER_OPTIMIZATION)
 
-NDK_PLATFORM = android-8
+# NDK_PLATFORM = android-8
+NDK_PLATFORM = android-14
 GCC_VERSION = 4.6
 
 ifeq ($(findstring Release_arm7,$(MAKECMDGOALS)),Release_arm7)
