@@ -479,6 +479,8 @@ public class OFAndroid {
     public static native void onButtonPressed(int padId, int button);
     public static native void onButtonReleased(int padId, int button);
 //    public static native void onUnplug(int padId);
+    public static native void onDeviceAdded(int padId);
+    public static native void onDeviceRemoved(int padId);
     
     public static native void onTouchDown(int id,float x,float y,float pressure);
     public static native void onTouchDoubleTap(int id,float x,float y,float pressure);
@@ -870,7 +872,7 @@ public class OFAndroid {
         	
         	//int player = OuyaController.getControllerByDeviceId(event.getDeviceId()).getPlayerNum();
         	int player = event.getDeviceId();
-    		onButtonReleased(player, keyCode);
+    		onButtonPressed(player, keyCode);
 
         	// return false to let Android handle certain keys
     		// like the back and menu keys
@@ -938,6 +940,14 @@ public class OFAndroid {
 	     }
 
 		return false;
+	}
+
+	public static void inputDeviceAdded(int deviceId) {
+		onDeviceAdded(deviceId);
+	}
+	
+	public static void inputDeviceRemoved(int deviceId) {
+		onDeviceRemoved(deviceId);
 	}
 }
 
