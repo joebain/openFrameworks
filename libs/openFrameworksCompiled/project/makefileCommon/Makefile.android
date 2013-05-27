@@ -1,6 +1,7 @@
 COMPILER_OPTIMIZATION = $(ANDROID_COMPILER_OPTIMIZATION)
 
 NDK_PLATFORM = android-14
+SDK_PLATFORM = android-16
 GCC_VERSION = 4.6
 
 ifeq ($(findstring Release_arm7,$(MAKECMDGOALS)),Release_arm7)
@@ -34,7 +35,7 @@ LDFLAGS = --sysroot=$(SYSROOT) -nostdlib -L"$(NDK_ROOT)/sources/cxx-stl/gnu-libs
 ifeq ($(HOST_PLATFORM),linux-x86)
 	LDFLAGS += -fuse-ld=gold
 endif
-SYSTEMLIBS +=  -lsupc++ -lz -lGLESv1_CM -lGLESv2 -llog -ldl -lm -lc $(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/libs/$(ABI)/libgnustl_static.a -lgcc
+SYSTEMLIBS +=  -lsupc++ -lz -lGLESv1_CM -lGLESv2 -llog -ldl -lm -lc $(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/libs/$(ABI)/libgnustl_static.a -lgcc $(NDK_ROOT)/platforms/$(NDK_PLATFORM)/arch-arm/usr/lib/crtbegin_so.o
 LIB_STATIC += $(OF_ROOT)/libs/poco/lib/$(LIBSPATH)/libPocoNet.a $(OF_ROOT)/libs/poco/lib/$(LIBSPATH)/libPocoXML.a $(OF_ROOT)/libs/poco/lib/$(LIBSPATH)/libPocoFoundation.a
 #LIB_STATIC += $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libsndfile.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libcommon.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libgsm.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libg72x.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libFLAC.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libreplaygain_synthesis.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libreplaygain_analysis.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libgrabbag.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libgrabbag.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libgetopt.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libutf8.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libvorbis.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libvorbisfile.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libvorbisenc.a $(OF_ROOT)/libs/libsndfile/lib/$(LIBSPATH)/libogg.a
 
@@ -147,9 +148,9 @@ endif
 AndroidInstall:	
 	cd $(OF_ROOT)/addons/ofxAndroid/ofAndroidLib; \
 	if [ "$(shell uname)" = "MINGW32_NT-6.1" ]; then \
-	cmd //c $(SDK_ROOT)/tools/android.bat update project --target $(NDK_PLATFORM) --path .; \
+	cmd //c $(SDK_ROOT)/tools/android.bat update project --target $(SDK_PLATFORM) --path .; \
 	else \
-	$(SDK_ROOT)/tools/android update project --target $(NDK_PLATFORM) --path .; \
+	$(SDK_ROOT)/tools/android update project --target $(SDK_PLATFORM) --path .; \
 	fi
 	cd $(PROJECT_PATH); \
 	if [ -d "bin/data" ]; then \
@@ -162,9 +163,9 @@ AndroidInstall:
 	if [ -f obj/$(BIN_NAME) ]; then rm obj/$(BIN_NAME); fi
 	#touch AndroidManifest.xml
 	if [ "$(shell uname)" = "MINGW32_NT-6.1" ]; then \
-	cmd //c $(SDK_ROOT)/tools/android.bat update project --target $(NDK_PLATFORM) --path $(PROJECT_PATH); \
+	cmd //c $(SDK_ROOT)/tools/android.bat update project --target $(SDK_PLATFORM) --path $(PROJECT_PATH); \
 	else \
-	$(SDK_ROOT)/tools/android update project --target $(NDK_PLATFORM) --path $(PROJECT_PATH); \
+	$(SDK_ROOT)/tools/android update project --target $(SDK_PLATFORM) --path $(PROJECT_PATH); \
 	fi
 	if [ -d bin/classes ]; then rm -r bin/classes; fi
 	if [ -d bin/res ]; then rm -r bin/res; fi
